@@ -1,0 +1,11 @@
+{
+    "defaultSeverity": "error",
+    "rules": {
+        "no-console": false,
+        "cyclomatic-complexity": true,
+        "interface-name": false,
+        "object-literal-sort-keys": false,
+        "ordered-imports": false
+    },
+    "extends": ["tslint:recommended", "tslint-sonarts"]
+}
