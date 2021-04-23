@@ -1,12 +1,6 @@
-// tslint:disable-next-line: no-commented-code
-// tslint:disable:typedef
-// tslint:disable:no-magic-numbers
-// tslint:disable:no-duplicate-string
-// tslint:disable:no-big-function
-
 import { isObservable, Observable, of } from "rxjs";
-import { EntityStore } from "./EntityStore";
-import { EntityStoreConfig } from "./EntityStore.type";
+import { EntityStore } from "./entityStore";
+import { EntityStoreConfig } from "./type";
 
 describe("Entity Store", () => {
     interface MockEntity {
@@ -158,7 +152,7 @@ describe("Entity Store", () => {
 
         describe(`cache invalidation`, () => {
             it(`should update the value when the entity is invalidated`, async (done): Promise<void> => {
-                let entityName: number = 0;
+                let entityName = 0;
                 const getEntity: () => MockEntity = () => ({
                     id: "123abc",
                     name: (entityName++).toString(),
@@ -168,7 +162,7 @@ describe("Entity Store", () => {
                     getEntity,
                 );
 
-                let receivedCount: number = 0;
+                let receivedCount = 0;
                 stream.subscribe((value: MockEntity) => {
                     receivedCount++;
                     switch (receivedCount) {
