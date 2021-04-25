@@ -11,3 +11,11 @@ export const notUndefined: <T>(
 export function isYbKey(value: unknown): value is Id {
     return typeof value === "string" || typeof value === "number";
 }
+
+export function isPromise<T>(value: unknown): value is Promise<T> {
+    return (
+        typeof value === "object" &&
+        "then" in value! &&
+        typeof value["then"] === "function"
+    );
+}

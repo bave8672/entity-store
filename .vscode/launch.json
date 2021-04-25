@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "args": [
+                "--config",
+                "jest.config.js",
+                "--runInBand",
+                "--coverage=false",
+                "--testPathIgnorePatterns=E2E"
+            ],
+            "runtimeArgs": ["--nolazy"],
+            "console": "internalConsole",
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "internalConsoleOptions": "openOnSessionStart",
+            "smartStep": true
+        }
+    ]
+}

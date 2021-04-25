@@ -1,6 +1,7 @@
 import {
     BehaviorSubject,
     combineLatest,
+    from,
     isObservable,
     Observable,
     of,
@@ -16,7 +17,7 @@ import {
     tap,
 } from "rxjs/operators";
 import { DEFAULT_ENTITY_STORE_TIME, HUMAN_REACTION_TIME } from "./constant";
-import { isYbKey, notUndefined } from "./support";
+import { isPromise, isYbKey, notUndefined } from "./support";
 import { EntityStoreConfig, Id } from "./type";
 
 export class EntityStore<T, TId extends Id = Id> {
@@ -54,19 +55,13 @@ export class EntityStore<T, TId extends Id = Id> {
         clearTimeout(this.pendingDeletions.get(id) as NodeJS.Timeout);
         this.pendingDeletions.set(
             id,
-            setTimeout(() => {
-                const subjectRef: BehaviorSubject<
-                    T | undefined
-                > = this.getEntitySubjectRef(id);
-                if (subjectRef.observers.length > 0) {
-                    this.setPendingDeletion(id, cacheTime);
-                    return;
-                } else {
-                    this.cache.delete(id);
-                    this.pendingDeletions.delete(id);
-                }
-            }, cacheTime),
+            setTimeout(() => this.deleteSync(id), cacheTime),
         );
+    }
+
+    private cancelPendingDeletion(id: Id): void {
+        clearTimeout(this.pendingDeletions.get(id) as NodeJS.Timeout);
+        this.pendingDeletions.delete(id);
     }
 
     private setSync(value: T, cacheTime: number): Observable<T> {
@@ -74,11 +69,11 @@ export class EntityStore<T, TId extends Id = Id> {
         const entitySubjectRef = this.getEntitySubjectRef(id);
         const prevValue: T | undefined = entitySubjectRef.getValue();
         const isNew: boolean = prevValue === undefined || prevValue !== value;
-        entitySubjectRef.next(value);
         if (isNew) {
+            this.setPendingDeletion(id, cacheTime);
+            entitySubjectRef.next(value);
             this.updateStream.next(entitySubjectRef);
         }
-        this.setPendingDeletion(id, cacheTime);
         return this.get(id);
     }
 
@@ -92,6 +87,7 @@ export class EntityStore<T, TId extends Id = Id> {
         const id: Id = isYbKey(value) ? value : this.config.idAccessor(value);
         this.getEntitySubjectRef(id).next(undefined);
         this.cache.delete(id);
+        this.cancelPendingDeletion(id);
         this.updateStream.next();
     }
 
@@ -126,12 +122,16 @@ export class EntityStore<T, TId extends Id = Id> {
      * @returns The stream of entities stored for the given ID
      */
     public set(
-        input: T | Observable<T>,
+        input: T | Promise<T> | Observable<T>,
         cacheTime = DEFAULT_ENTITY_STORE_TIME,
     ): Observable<T> {
-        return isObservable(input)
-            ? this.setAsync(input, cacheTime)
-            : this.setSync(input, cacheTime);
+        if (isObservable(input)) {
+            return this.setAsync(input, cacheTime);
+        } else if (isPromise<T>(input)) {
+            return this.setAsync(from(input), cacheTime);
+        } else {
+            return this.setSync(input, cacheTime);
+        }
     }
 
     /**
@@ -153,7 +153,7 @@ export class EntityStore<T, TId extends Id = Id> {
      */
     public getOrSet(
         id: Id,
-        getInput: () => T | Observable<T>,
+        getInput: () => T | Promise<T> | Observable<T>,
         cacheTime = DEFAULT_ENTITY_STORE_TIME,
     ): Observable<T> {
         const entitySubject = this.getEntitySubjectRef(id);
@@ -166,7 +166,7 @@ export class EntityStore<T, TId extends Id = Id> {
             switchMap((entity: T | undefined) =>
                 entity !== undefined
                     ? of(entity)
-                    : this.getOrSet(id, getInput, cacheTime),
+                    : this.getOrSet(id, getInput, cacheTime).pipe(first()),
             ),
             distinctUntilChanged(),
         );
@@ -177,12 +177,17 @@ export class EntityStore<T, TId extends Id = Id> {
      * @param input can be an entity or an ID, or a stream of either.
      */
     public delete(stream: Observable<T | Id>): Observable<void>;
+    public delete(stream: Promise<T | Id>): Observable<void>;
     public delete(value: T | Id): void;
-    public delete(input: Observable<T | Id> | T | Id): Observable<void> | void {
+    public delete(
+        input: Observable<T | Id> | Promise<T | Id> | T | Id,
+    ): Observable<void> | void {
         if (isObservable(input)) {
             return this.deleteAsync(input);
+        } else if (isPromise(input)) {
+            return this.deleteAsync(from(input));
         } else {
-            this.deleteSync(input);
+            return this.deleteSync(input);
         }
     }
 
@@ -190,7 +195,15 @@ export class EntityStore<T, TId extends Id = Id> {
      * Clears all values from the store
      */
     public clear(): void {
+        for (const subject of this.cache.values()) {
+            subject.complete();
+            subject.unsubscribe();
+        }
         this.cache.clear();
+        for (const pendingDeletion of this.pendingDeletions.values()) {
+            clearTimeout(pendingDeletion as NodeJS.Timeout);
+        }
+        this.pendingDeletions.clear();
         this.updateStream.next();
     }
 
@@ -200,14 +213,19 @@ export class EntityStore<T, TId extends Id = Id> {
      * @param cacheTime the cache time in milliseconds
      */
     public setMany(input: Observable<T[]>, cacheTime?: number): Observable<T[]>;
+    public setMany(input: Promise<T[]>, cacheTime?: number): Observable<T[]>;
     public setMany(input: T[], cacheTime?: number): T[];
     public setMany(
-        input: Observable<T[]> | T[],
+        input: Observable<T[]> | Promise<T[]> | T[],
         cacheTime = DEFAULT_ENTITY_STORE_TIME,
     ): Observable<T[]> | T[] {
-        return isObservable(input)
-            ? this.setManyAsync(input, cacheTime)
-            : this.setManySync(input, cacheTime);
+        if (isObservable(input)) {
+            return this.setManyAsync(input, cacheTime);
+        } else if (isPromise<T[]>(input)) {
+            return this.setManyAsync(from(input), cacheTime);
+        } else {
+            return this.setManySync(input, cacheTime);
+        }
     }
 
     /**
@@ -218,7 +236,7 @@ export class EntityStore<T, TId extends Id = Id> {
     public getAll(): Observable<T[]> {
         return this.updateStream.pipe(
             debounceTime(HUMAN_REACTION_TIME),
-            startWith(() => undefined),
+            startWith(undefined),
             map(() =>
                 Array.from(this.cache.keys()).filter(
                     (key: Id) =>
@@ -231,5 +249,13 @@ export class EntityStore<T, TId extends Id = Id> {
                     : of([]),
             ),
         );
+    }
+
+    /**
+     * Disposes of all resources controlled by the store
+     */
+    public dispose() {
+        this.clear();
+        this.updateStream.complete();
     }
 }

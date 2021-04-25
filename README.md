@@ -14,10 +14,10 @@ interface Book {
 
 // And imagine we have a CRUD API over the network
 interface RestAPI {
-    getBooks(): Observable<Book[]>;
-    getBook(isbn: string): Observable<Book>;
-    updateBook(book: Book): Observable<Book>;
-    deleteBook(isbn: string): Observable<Book>;
+    getBooks(): Promise<Book[]>;
+    getBook(isbn: string): Promise<Book>;
+    updateBook(book: Book): Promise<Book>;
+    deleteBook(isbn: string): Promise<Book>;
 }
 
 // we can define a store to help cache these books
@@ -64,5 +64,13 @@ class BookDetailComponent {
     this.book = bookService.getBook(this.isbn);
 }
 
-// etc...
+// other services or components can reuse the store to create, update or delete entities
+// and all changes will be replayed to all observers.
+```
+
+## Contributing
+
+```bash
+npm ci # install deps
+npm run test # run tests
 ```
