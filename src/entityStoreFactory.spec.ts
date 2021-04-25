@@ -1,18 +1,18 @@
 import { EntityStore } from "./entityStore";
 import { EntityStoreFactory } from "./entityStoreFactory";
-import { EntityStoreConfig } from "./type";
+import { EntityStoreFactoryRequest } from "./type";
 
 describe("entity store factory", () => {
     let entityStoreFactory: EntityStoreFactory;
 
-    const MOCK_ENTITY_CONFIG_A: EntityStoreConfig<any> = {
+    const MOCK_ENTITY_CONFIG_A: EntityStoreFactoryRequest<any> = {
         idAccessor: (entity): string => entity.id,
-        key: "123abc",
+        id: "123abc",
     };
 
-    const MOCK_ENTITY_CONFIG_B: EntityStoreConfig<any> = {
+    const MOCK_ENTITY_CONFIG_B: EntityStoreFactoryRequest<any> = {
         idAccessor: (entity): string => entity.id,
-        key: "789xyz",
+        id: "789xyz",
     };
 
     beforeEach(() => {

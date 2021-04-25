@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>EntityStoreConfig | rx-entity-store</title>
+	<title>DefaultEntityType | rx-entity-store</title>
 	<meta name="description" content="Documentation for rx-entity-store">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,29 +55,19 @@
 					<a href="../modules.html">rx-entity-store</a>
 				</li>
 				<li>
-					<a href="entitystoreconfig.html">EntityStoreConfig</a>
+					<a href="defaultentitytype.html">DefaultEntityType</a>
 				</li>
 			</ul>
-			<h1>Interface EntityStoreConfig&lt;T, TId&gt;</h1>
+			<h1>Interface DefaultEntityType&lt;TId&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Configuration for an instance of an entity store</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T</h4>
-					</li>
 					<li>
 						<h4>TId<span class="tsd-signature-symbol">: </span><a href="../modules.html#id" class="tsd-signature-type" data-tsd-kind="Type alias">Id</a> = <a href="../modules.html#id" class="tsd-signature-type" data-tsd-kind="Type alias">Id</a></h4>
 					</li>
@@ -87,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityStoreConfig</span>
+						<span class="target">DefaultEntityType</span>
 					</li>
 				</ul>
 			</section>
@@ -98,8 +88,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitystoreconfig.html#idaccessor" class="tsd-kind-icon">id<wbr>Accessor</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitystoreconfig.html#key" class="tsd-kind-icon">key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="defaultentitytype.html#id" class="tsd-kind-icon">id</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,55 +97,14 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="idaccessor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> id<wbr>Accessor</h3>
-					<div class="tsd-signature tsd-kind-icon">id<wbr>Accessor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TId</span></div>
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TId</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in type.ts:17</li>
+							<li>Defined in <a href="https://github.com/bave8672/entity-store/blob/c3d7221/src/type.ts#L7">type.ts:7</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Tells the store how to access the unique ID of an entity passed to it</p>
-						</div>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TId</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>entity: <span class="tsd-signature-type">T</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TId</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="key" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> key</h3>
-					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <a href="../modules.html#id" class="tsd-signature-type" data-tsd-kind="Type alias">Id</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in type.ts:13</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The name or ID of a store instance</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -179,23 +127,29 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="entitystoreconfig.html" class="tsd-kind-icon">Entity<wbr>Store<wbr>Config</a>
+						<a href="defaultentitytype.html" class="tsd-kind-icon">Default<wbr>Entity<wbr>Type</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="entitystoreconfig.html#idaccessor" class="tsd-kind-icon">id<wbr>Accessor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="entitystoreconfig.html#key" class="tsd-kind-icon">key</a>
+								<a href="defaultentitytype.html#id" class="tsd-kind-icon">id</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="../modules.html#entitystoreconfig" class="tsd-kind-icon">Entity<wbr>Store<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="../modules.html#entitystorefactoryrequest" class="tsd-kind-icon">Entity<wbr>Store<wbr>Factory<wbr>Request</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../modules.html#id" class="tsd-kind-icon">Id</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="../modules.html#default_entity_store_time" class="tsd-kind-icon">DEFAULT_<wbr>ENTITY_<wbr>STORE_<wbr>TIME</a>
+						<a href="../modules.html#default_cache_time" class="tsd-kind-icon">DEFAULT_<wbr>CACHE_<wbr>TIME</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="../modules.html#default_store_config" class="tsd-kind-icon">DEFAULT_<wbr>STORE_<wbr>CONFIG</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../modules.html#human_reaction_time" class="tsd-kind-icon">HUMAN_<wbr>REACTION_<wbr>TIME</a>

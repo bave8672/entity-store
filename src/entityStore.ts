@@ -16,11 +16,16 @@ import {
     switchMap,
     tap,
 } from "rxjs/operators";
-import { DEFAULT_ENTITY_STORE_TIME, HUMAN_REACTION_TIME } from "./constant";
+import {
+    DEFAULT_CACHE_TIME,
+    DEFAULT_STORE_CONFIG,
+    HUMAN_REACTION_TIME,
+} from "./constant";
 import { isPromise, isYbKey, notUndefined } from "./support";
-import { EntityStoreConfig, Id } from "./type";
+import { DefaultEntityType, EntityStoreConfig, Id } from "./type";
 
-export class EntityStore<T, TId extends Id = Id> {
+export class EntityStore<T = DefaultEntityType, TId extends Id = Id> {
+    private readonly config: EntityStoreConfig<T, TId>;
     private readonly cache: Map<Id, BehaviorSubject<T | undefined>> = new Map<
         Id,
         BehaviorSubject<T | undefined>
@@ -33,7 +38,16 @@ export class EntityStore<T, TId extends Id = Id> {
         number | NodeJS.Timeout
     > = new Map<string, number | NodeJS.Timeout>();
 
-    public constructor(private readonly config: EntityStoreConfig<T, TId>) {}
+    public constructor(
+        config: Partial<EntityStoreConfig<T, TId>> & T extends DefaultEntityType
+            ? Partial<EntityStoreConfig<T, TId>>
+            : Pick<EntityStoreConfig<T, TId>, "idAccessor"> = {} as any,
+    ) {
+        this.config = {
+            ...DEFAULT_STORE_CONFIG,
+            ...config,
+        } as any;
+    }
 
     private getCacheKey(id?: Id): string {
         return `${id}`;
@@ -123,7 +137,7 @@ export class EntityStore<T, TId extends Id = Id> {
      */
     public set(
         input: T | Promise<T> | Observable<T>,
-        cacheTime = DEFAULT_ENTITY_STORE_TIME,
+        cacheTime = DEFAULT_CACHE_TIME,
     ): Observable<T> {
         if (isObservable(input)) {
             return this.setAsync(input, cacheTime);
@@ -154,7 +168,7 @@ export class EntityStore<T, TId extends Id = Id> {
     public getOrSet(
         id: Id,
         getInput: () => T | Promise<T> | Observable<T>,
-        cacheTime = DEFAULT_ENTITY_STORE_TIME,
+        cacheTime = DEFAULT_CACHE_TIME,
     ): Observable<T> {
         const entitySubject = this.getEntitySubjectRef(id);
         return (entitySubject.getValue() !== undefined
@@ -217,7 +231,7 @@ export class EntityStore<T, TId extends Id = Id> {
     public setMany(input: T[], cacheTime?: number): T[];
     public setMany(
         input: Observable<T[]> | Promise<T[]> | T[],
-        cacheTime = DEFAULT_ENTITY_STORE_TIME,
+        cacheTime = DEFAULT_CACHE_TIME,
     ): Observable<T[]> | T[] {
         if (isObservable(input)) {
             return this.setManyAsync(input, cacheTime);

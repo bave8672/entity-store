@@ -1,4 +1,5 @@
 import { isObservable, Observable, of } from "rxjs";
+import { DEFAULT_CACHE_TIME } from "./constant";
 import { EntityStore, EntityStoreConfig } from "./index";
 
 describe("Entity Store", () => {
@@ -8,14 +9,33 @@ describe("Entity Store", () => {
     }
 
     const MOCK_ENTITY_CONFIG: EntityStoreConfig<MockEntity> = {
+        defaultCacheTIme: DEFAULT_CACHE_TIME,
         idAccessor: (entity: MockEntity): string => entity.id,
-        key: "123abc",
     };
+
+    describe(`Constructor`, () => {
+        interface Simple {
+            id: string;
+        }
+
+        interface Complex {
+            complexId: string;
+        }
+
+        it(`Should not require config for the default entity type`, () => {
+            new EntityStore<Simple>({});
+        });
+
+        it(`Should require an id accessor when the entity id field does not match "id"`, () => {
+            new EntityStore<Complex>({ idAccessor: (e) => e.complexId });
+            new EntityStore<Complex>();
+        });
+    });
 
     describe("basic get/set", () => {
         describe("async operations", () => {
             it("should return an unresolved observable for values that have not been set", () => {
-                const store = new EntityStore(MOCK_ENTITY_CONFIG);
+                const store = new EntityStore<MockEntity>(MOCK_ENTITY_CONFIG);
                 const stream: Observable<MockEntity> = store.get("asxasx");
                 stream.subscribe((value: MockEntity) => {
                     throw new Error(`Unexpected value: ${value}`);

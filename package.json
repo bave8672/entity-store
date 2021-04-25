@@ -5,7 +5,7 @@
     "main": "lib/index.js",
     "scripts": {
         "test": "jest",
-        "build": "esbuild src/index.ts --platform=neutral --bundle --external:rxjs --sourcemap=external --outdir=lib && docs",
+        "build": "esbuild src/index.ts --platform=neutral --bundle --external:rxjs --sourcemap=external --outdir=lib && typedoc --entryPoints src/index.ts",
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "publish-ci": "node publish.js",
         "docs": "typedoc --entryPoints src/index.ts"
