@@ -82,6 +82,10 @@ class BookDetailComponent {
 // and all changes will be replayed to all observers.
 ```
 
+## Docs
+
+https://bave8672.github.io/entity-store/
+
 ## Contributing
 
 ```bash
