@@ -23,12 +23,13 @@ describe("Entity Store", () => {
         }
 
         it(`Should not require config for the default entity type`, () => {
+            new EntityStore<Simple>();
             new EntityStore<Simple>({});
         });
 
         it(`Should require an id accessor when the entity id field does not match "id"`, () => {
-            new EntityStore<Complex>({ idAccessor: (e) => e.complexId });
             new EntityStore<Complex>();
+            new EntityStore<Complex>({ idAccessor: (e) => e.complexId });
         });
     });
 

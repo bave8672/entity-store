@@ -1,4 +1,4 @@
-# rx-entity-store
+# @bave8672/rx-entity-store
 
 Provides an rxjs observable API layer over a key-value store, similar to a redux store but much simpler. Intended for use as an in-memory cache for entities requested over a network.
 
@@ -22,7 +22,7 @@ interface RestAPI {
 
 // we can define a store to help cache these books
 // for reuse in multiple places
-import { EntityStore } from "rx-entity-store";
+import { EntityStore } from "@bave8672/rx-entity-store";
 const bookStoreConfig = {
     key: "books", // a name for our store
     idAccessor: (book) => book.ISBN, // use the ISBN as an ID
