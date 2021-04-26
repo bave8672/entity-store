@@ -2,7 +2,21 @@
 
 Provides an rxjs observable API layer over a key-value store, similar to a redux store but much simpler. Intended for use as an in-memory cache for entities requested over a network.
 
-## Example:
+## Installation
+
+Add the following line to your project's `.npmrc` file:
+
+```
+@bave8672:registry=https://npm.pkg.github.com
+```
+
+Then install:
+
+```bash
+npm install @bave8672/rx-entity-store
+```
+
+## Example Usage:
 
 ```typescript
 // Imagine our app deals with books
