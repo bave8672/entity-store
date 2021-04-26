@@ -5,12 +5,9 @@ module.exports = {
     collectCoverageFrom: ["src/**/*.ts", "!src/**/*.spec.ts"],
     coverageThreshold: {
         global: {
-            branches: 70,
-            functions: 70,
-            lines: 70,
-            statements: 70,
+            branches: 100,
         },
     },
-    testPathIgnorePatterns: ["/node_modules/", "/.build/", "/dist/"],
+    testPathIgnorePatterns: ["/node_modules/", "/.build/", "/dist/", "/lib/"],
     silent: true,
 };

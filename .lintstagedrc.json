@@ -1,0 +1,9 @@
+{
+    "linters": {
+        "*.{css,scss,json}": ["prettier --write", "git add"],
+        "*.{html}": ["prettier --write --parser=angular", "git add"],
+        "*.{yml}": ["prettier --write --parser=yaml", "git add"],
+        "*.{js,ts}": ["prettier --write --parser=typescript", "git add"]
+    },
+    "ignore": ["lib/**", "docs/**"]
+}
