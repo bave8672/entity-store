@@ -11,3 +11,9 @@ tsconfig.json
 .eslintignore
 node_modules
 docs
+.prettierrx.yml
+.travis.yml
+.tslint.json
+jest.config.js
+.eslintrc.js 
+.huskyrc.js

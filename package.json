@@ -1,5 +1,5 @@
 {
-    "name": "rx-entity-store",
+    "name": "@bave8672/rx-entity-store",
     "version": "0.0.1",
     "description": "rxjs entity store helpers",
     "main": "lib/index.js",
